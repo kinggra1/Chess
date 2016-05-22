@@ -6,10 +6,14 @@ public class GameController : MonoBehaviour {
 
 	private static Player player1 = new Player(Color.white);
 	private static Player player2 = new Player(Color.black);
-
-	public GameObject square_prefab;
 	public static List<Square> board = new List<Square>();
+
+	private static GameState currentState;
+	private static GameState nextState;
+
 	private static Piece heldPiece;
+	
+	public GameObject square_prefab;
 
 	public GameObject queen_prefab;
 	public GameObject king_prefab;
@@ -26,6 +30,7 @@ public class GameController : MonoBehaviour {
 			for (int j = 0; j < 8; j++) {
 				GameObject sq = Instantiate(square_prefab) as GameObject;
 				Square square = sq.GetComponent<Square>();
+				square.setPos(new Square.BoardPosition(i, j));
 				sq.transform.position = new Vector3(-3.5f + i, 3.5f - j, 0f);
 				if ((i+j)%2 != 0)
 					square.setColor(Color.black);
@@ -53,6 +58,28 @@ public class GameController : MonoBehaviour {
 			Vector3 mousePos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 			heldPiece.transform.position = new Vector3(mousePos.x, mousePos.y, 0f);
 		}
+
+		// for cases where we click, drag, and release
+		if (Input.GetMouseButtonUp (0) && heldPiece != null) {
+			RaycastHit2D hit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition));
+			if (hit.collider != null) {
+				Square s = hit.collider.GetComponent<Square>();
+				if (s.getPiece() != heldPiece) {
+				
+					if (heldPiece.canMove(s))
+						moveHeldPiece(s);
+					else
+						dropHeldPiece();
+				}
+			}
+		}
+	}
+
+	public static List<Piece> getPieces() {
+		List<Piece> pieces = new List<Piece>();
+		pieces.AddRange (player1.getPieces());
+		pieces.AddRange (player2.getPieces());
+		return pieces;
 	}
 
 	public static void placePiece(Piece p, Square s) {
@@ -61,41 +88,25 @@ public class GameController : MonoBehaviour {
 		p.setSquare (s); // set square to piece
 	}
 
-	void OnMouseDown() {
-		RaycastHit hitInfo;
-		if (Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out hitInfo, 50f)) {
-			Square square = hitInfo.collider.GetComponent<Square>();
-			if (square != null) {
+	public static void movePiece(Piece p, Square s) {
+		p.getSquare().setPiece (null); // remove this piece from it's current square
+		s.setPiece (p); // set it to a new one
+		p.setSquare (s); // set square to piece
 
-				if (heldPiece == null) {
-					setHeldPiece(square.getPiece());
-				}
-				else {
-					// try to move piece here
-				}
-
-			}
-		}
+		// check to see if we're good?
 	}
 
-	void OnMouseUp() {
-		RaycastHit hitInfo;
-		if (Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out hitInfo, 50f)) {
-			Square square = hitInfo.collider.GetComponent<Square>();
-			if (square != null) {
-				
-				if (heldPiece == null) {
+	public static void moveHeldPiece(Square s) {
+		placePiece (heldPiece, s);
+		heldPiece = null;
+	}
 
-				}
-				else {
-					if (square.getPiece == heldPiece) {
-						
-					}
-				}
-				
-			}
-		}
-		setHeldPiece (null);
+	public static void dropHeldPiece() {
+		placePiece (heldPiece, heldPiece.getSquare ());
+	}
+
+	public static Piece getHeldPiece() {
+		return heldPiece;
 	}
 
 	public static void setHeldPiece(Piece p) {

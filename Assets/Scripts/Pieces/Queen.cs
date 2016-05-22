@@ -7,7 +7,21 @@ public class Queen : Piece {
 
 	}
 
-	public override bool canMove(int x, int y) {
-		return true;
+	public override bool canMove(Square s) {
+		Square.BoardPosition newPos = s.getPos ();
+		int newX = newPos.x;
+		int newY = newPos.y;
+		Square.BoardPosition pos = getSquare().getPos ();
+		int x = pos.x;
+		int y = pos.y;
+
+		if (x == newX || y == newY || Mathf.Abs(x - newX) == Mathf.Abs(y - newY))
+			return true;
+
+		return false;
+	}
+
+	public override void updatePossibleMoves() {
+		
 	}
 }

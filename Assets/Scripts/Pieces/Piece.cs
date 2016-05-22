@@ -1,10 +1,13 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public abstract class Piece : MonoBehaviour {
 
 	private Player player;
 	private Square square;
+
+	private List<Square> possibleMoves = new List<Square>();
 
 	public Piece () {
 	
@@ -36,7 +39,8 @@ public abstract class Piece : MonoBehaviour {
 
 	}
 
-	public abstract bool canMove(int x, int y);
+	public abstract bool canMove(Square s);
+	public abstract void updatePossibleMoves();
 	
 }
 
