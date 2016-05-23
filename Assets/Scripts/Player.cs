@@ -17,6 +17,7 @@ public class Player
 
 	public void addPiece(Piece p) {
 		pieces.Add (p);
+		p.setPlayer (this);
 	}
 
 	public List<Piece> getPieces() {
