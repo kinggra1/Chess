@@ -23,6 +23,10 @@ public abstract class Piece : MonoBehaviour {
 		return square;
 	}
 
+	public void setColor(Color color) {
+		GetComponent<SpriteRenderer> ().color = color;
+	}
+
 	public void setPlayer(Player p) {
 		this.player = p;
 	}

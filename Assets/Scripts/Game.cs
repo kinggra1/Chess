@@ -21,7 +21,7 @@ public class Game
 		this.controller = controller;
 		switch (t) {
 		case(Type.STANDARD):
-			currentState = new GameState(numPlayers);
+			currentState = new GameState(2);
 			this.boardWidth = boardWidth;
 			this.boardHeight = boardHeight;
 
@@ -38,8 +38,15 @@ public class Game
 				}
 			}
 
+			Player p1 = currentState.getPlayer(0);
+			p1.setColor(Color.white);
+			Player p2 = currentState.getPlayer (1);
+			p2.setColor(Color.black);
+
 			Piece p = GameObject.Instantiate(controller.queen_prefab).GetComponent<Queen>();
-			//currentState.createPiece(p, getSquare(0, 0), 0);
+			currentState.createPiece(p, getSquare(7, 4), p1);
+			p = GameObject.Instantiate(controller.queen_prefab).GetComponent<Queen>();
+			currentState.createPiece(p, getSquare(0, 3), p2);
 
 
 			break;

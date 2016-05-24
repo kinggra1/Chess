@@ -46,6 +46,7 @@ public class GameState
 		s.setPiece (p); // set it to a new one
 		p.setSquare (s); // set square to piece
 		player.addPiece (p);
+		p.setColor (player.getColor ());
 	}
 	
 	public void movePiece(Piece p, Square s) {
