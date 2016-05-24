@@ -20,7 +20,7 @@ public class GameController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		game = new Game (Game.Type.STANDARD, square_prefab, 2, 8, 8);
+		game = new Game (this, Game.Type.STANDARD, square_prefab, 2, 8, 8);
 
 	}
 	

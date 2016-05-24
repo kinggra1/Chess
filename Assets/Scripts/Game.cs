@@ -7,6 +7,8 @@ public class Game
 	public enum Type { STANDARD, CUSTOM };
 	private Type type = Type.STANDARD;
 
+	private GameController controller;
+
 	private List<Square> board = new List<Square> ();
 	private GameState currentState;
 	private GameState testState;
@@ -14,8 +16,9 @@ public class Game
 	private int boardWidth;
 	private int boardHeight;
 
-	public Game (Type t, GameObject square_prefab, int numPlayers = 2, int boardWidth = 8, int boardHeight = 8)
+	public Game (GameController controller, Type t, GameObject square_prefab, int numPlayers = 2, int boardWidth = 8, int boardHeight = 8)
 	{
+		this.controller = controller;
 		switch (t) {
 		case(Type.STANDARD):
 			currentState = new GameState(numPlayers);
@@ -34,6 +37,10 @@ public class Game
 					board.Add (square);
 				}
 			}
+
+			Piece p = GameObject.Instantiate(controller.queen_prefab).GetComponent<Queen>();
+			//currentState.createPiece(p, getSquare(0, 0), 0);
+
 
 			break;
 		
@@ -57,6 +64,10 @@ public class Game
 
 	public Square getSquare(int row, int column) {
 		return board [row * boardWidth + column];
+	}
+
+	public void createPiece(GameObject prefab, Square s, Player player) {
+		currentState.createPiece (prefab, s, player);
 	}
 	
 	public void createPiece(Piece p, Square s, Player player) {

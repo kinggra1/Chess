@@ -1,3 +1,4 @@
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 
@@ -10,6 +11,14 @@ public class GameState
 		for (int i = 0; i < numPlayers; i++) {
 			players.Add (new Player());
 		}
+	}
+
+	/// <summary>
+	/// Copy Constructor
+	/// </summary>
+	/// <param name="state">State.</param>
+	public GameState(GameState state) {
+		this.players = state.players;
 	}
 
 
@@ -27,6 +36,10 @@ public class GameState
 			pieces.AddRange(p.getPieces());
 		}
 		return pieces;
+	}
+
+	public void createPiece(GameObject prefab, Square s, Player player) {
+		
 	}
 	
 	public void createPiece(Piece p, Square s, Player player) {

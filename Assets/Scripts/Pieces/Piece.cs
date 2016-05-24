@@ -9,10 +9,6 @@ public abstract class Piece : MonoBehaviour {
 
 	private List<Square> possibleMoves = new List<Square>();
 
-	public Piece () {
-	
-	}
-
 	public Piece(Square s, Player player) {
 		square = s;
 		s.setPiece (this);
