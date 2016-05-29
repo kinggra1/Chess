@@ -31,6 +31,36 @@ public class GameController : MonoBehaviour {
 			heldPiece.transform.position = new Vector3(mousePos.x, mousePos.y, 0f);
 		}
 
+
+		// mouse controls
+#if UNITY_STANDALONE || UNITY_EDITOR 
+		if (Input.GetMouseButtonDown (0)) {
+			RaycastHit2D hit = Physics2D.GetRayIntersection(
+				Camera.main.ScreenPointToRay(Input.mousePosition));
+			if (hit.collider != null && hit.collider.GetComponent<Square>() != null ) {
+				Square square = hit.collider.GetComponent<Square>();
+				Piece piece = square.getPiece();
+				if (heldPiece == null) {
+					setHeldPiece(piece);
+				} 
+				
+				// currently holding a piece
+				else {
+					if (heldPiece == piece) {
+						// drop the piece back where it was
+						dropHeldPiece();
+					}
+					else {
+						// see if we can move the piece here, do so if possible
+						if (heldPiece.canMove(square))
+							moveHeldPiece(square);
+						else
+							dropHeldPiece();
+					}
+				}
+			}
+		}
+
 		// for cases where we click, drag, and release
 		if (Input.GetMouseButtonUp (0) && heldPiece != null) {
 			RaycastHit2D hit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition));
@@ -45,6 +75,16 @@ public class GameController : MonoBehaviour {
 				}
 			}
 		}
+#endif // Unity controls with mouse
+
+		// touch controls
+		#if UNITY_IOS || UNITY_ANDROID
+		if (Input.touches != 0) {
+
+		}
+#endif
+
+
 	}
 
 	public static List<Piece> getPieces() {

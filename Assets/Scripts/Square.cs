@@ -33,6 +33,7 @@ public class Square : MonoBehaviour {
 		piece.transform.position = this.transform.position;
 	}
 
+#if UNITY_EDITOR || UNITY_STANDALONE // only worry about mouseovers if we have a mouse
 	void OnMouseEnter() {
 		Color c = GetComponent<SpriteRenderer>().color;
 		if (color == Color.white) {
@@ -54,29 +55,7 @@ public class Square : MonoBehaviour {
 		}
 		GetComponent<SpriteRenderer> ().color = c;
 	}
-
-	void OnMouseDown() {
-
-		Piece heldPiece = GameController.getHeldPiece ();
-		if (heldPiece == null) {
-			GameController.setHeldPiece(piece);
-		} 
-
-		// currently holding a piece
-		else {
-			if (heldPiece == piece) {
-				// drop the piece back where it was
-				GameController.dropHeldPiece();
-			}
-			else {
-				// see if we can move the piece here, do so if possible
-				if (heldPiece.canMove(this))
-					GameController.moveHeldPiece(this);
-				else
-					GameController.dropHeldPiece();
-			}
-		}
-	}
+#endif
 
 	public void setColor(Color color) {
 		this.color = color;
